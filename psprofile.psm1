@@ -10,3 +10,4 @@ function go_up {Set-Location -Path ..}
 Set-Alias up go_up
 Export-ModuleMember -Alias *
 Export-ModuleMember go_up
+$GitPromptSettings.EnableFileStatus = $false
