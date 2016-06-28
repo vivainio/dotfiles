@@ -1,11 +1,7 @@
-Import-Module PSReadline
-
-Set-PSReadlineOption -EditMode Emacs
-Set-PSReadlineOption -BellStyle Visual
 
 Remove-Variable -Force HOME -erroraction 'silentlycontinue'
-Remove-Item Env:\HOMEPATH
-Remove-Item Env:\HOMEDRIVE
+Remove-Item Env:\HOMEPATH -ErrorAction SilentlyContinue
+Remove-Item Env:\HOMEDRIVE -ErrorAction SilentlyContinue
 Set-Variable HOME "C:\Users\villevai"
 (get-psprovider 'FileSystem').Home = 'C:\Users\villevai'
 Set-Alias ccat pygmentize
