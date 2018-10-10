@@ -12,25 +12,6 @@ Set-Alias up go_up
 Export-ModuleMember -Alias *
 Export-ModuleMember go_up
 
-#$GitPromptSettings.EnableFileStatus = $false
+Set-PSReadlineOption -BellStyle None
+Set-PSReadlineKeyHandler -Key Tab -Function Complete
 
-function global:prompt {
-    $realLASTEXITCODE = $LASTEXITCODE
-
-    # Reset color, which can be messed up by Enable-GitColors
-    $Host.UI.RawUI.ForegroundColor = $GitPromptSettings.DefaultForegroundColor
-
-    Write-Host($pwd.ProviderPath) -nonewline -ForegroundColor Green
-
-    Write-VcsStatus
-
-    # Prompt on newline, with cmder colours.
-    Write-Host
-    Write-Host ">" -nonewline -ForegroundColor DarkGray
-
-    $global:LASTEXITCODE = $realLASTEXITCODE
-    return " "
-}
-
-# More posh-git init.
-Enable-GitColors
