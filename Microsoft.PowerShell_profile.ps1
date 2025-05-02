@@ -53,11 +53,6 @@ Register-ArgumentCompleter -Native -CommandName aws -ScriptBlock {
         Remove-Item Env:\COMP_POINT  
 }
 
-# git completion. You need to run 
-# Install-Module posh-git -Scope CurrentUser -Force
-# for this to work.
-
-Import-Module posh-git
 
 # make it behave like bash completion (show list of options), and make it STFU
 Set-PSReadLineKeyHandler -Key Tab -Function MenuComplete
