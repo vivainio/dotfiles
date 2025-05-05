@@ -17,16 +17,14 @@ disabled = true
 disabled = true
 
 
-[git_status]
-# Reduce the timeout for Git status checks
-scan_timeout = 100  # Timeout in milliseconds
+[git_metrics]
+disabled = true
 
-# Disable unnecessary Git status indicators
-stashed = false
-untracked = false
-ahead = false
-behind = false
-diverged = false
+[git_status]
+disabled = true
 
 [docker_context]
+disabled = true
+
+[nodejs]
 disabled = true

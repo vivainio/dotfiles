@@ -1,5 +1,3 @@
-# zoxide kinda sucks tbh, but I use it
-Invoke-Expression (& { (zoxide init powershell | Out-String) })
 
 # starship prompt gives you a nice prompt with git status and other info
 
@@ -57,3 +55,6 @@ Register-ArgumentCompleter -Native -CommandName aws -ScriptBlock {
 # make it behave like bash completion (show list of options), and make it STFU
 Set-PSReadLineKeyHandler -Key Tab -Function MenuComplete
 Set-PSReadLineOption -BellStyle None
+
+# zoxide kinda sucks tbh, but I use it
+Invoke-Expression (& { (zoxide init powershell | Out-String) })
