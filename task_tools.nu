@@ -1,4 +1,3 @@
-
 def find-up [filename: string] {
   mut dir = $env.PWD
 
@@ -18,10 +17,21 @@ def find-up [filename: string] {
     $dir = $parent
   }
 }
-# Run tasks.py in current directory or parent directory
-# If a virtual environment is found, uv will be used to run the script
-# Otherwise, it will run with the system Python
-def pt [...args] {
+
+
+def tasks_complete [] {
+  let completions = run_tasks "--jsonhelp"
+  if (not ($completions | str starts-with "{")) {
+    return []
+  }
+  
+  let tasks = $completions | from json | transpose value description
+  $tasks
+}
+
+def run_tasks [
+  ...args  #additional arguments to pass to the task
+] {
   let task_file = (find-up "tasks.py")
   let task_dir = ($task_file | path dirname)
   let venv_dir = ($task_dir | path join ".venv")
@@ -35,6 +45,12 @@ def pt [...args] {
   }
 }
 
-
-
-
+# Run tasks.py in current directory or parent directory
+# If a virtual environment is found, uv will be used to run the script
+# Otherwise, it will run with the system Python
+export def pt [
+  task: string@tasks_complete  #the task name
+  ...args  #additional arguments to pass to the task
+] {
+  run_tasks $task ...$args
+}
