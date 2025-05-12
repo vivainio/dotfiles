@@ -52,6 +52,6 @@ export def pt [
   task?: string@tasks_complete  #the task name
   ...args  #additional arguments to pass to the task
 ] {
-  let all_args = [$task] ++ [args] | compact 
+  let all_args = [$task] ++ $args | compact 
   run_tasks ...$all_args
 }
