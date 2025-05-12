@@ -49,8 +49,9 @@ def run_tasks [
 # If a virtual environment is found, uv will be used to run the script
 # Otherwise, it will run with the system Python
 export def pt [
-  task: string@tasks_complete  #the task name
+  task?: string@tasks_complete  #the task name
   ...args  #additional arguments to pass to the task
 ] {
-  run_tasks $task ...$args
+  let all_args = [$task] ++ [args] | compact 
+  run_tasks ...$all_args
 }
