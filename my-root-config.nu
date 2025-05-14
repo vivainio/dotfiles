@@ -30,3 +30,7 @@ use ($comp + "curl/curl-completions.nu") *
 use ($comp + "dotnet/dotnet-completions.nu") *
 use ($comp + "git/git-completions.nu") *
 use ($comp + "rg/rg-completions.nu") *
+
+# Some libs I'm using from std lib
+
+use std-rfc/kv *
