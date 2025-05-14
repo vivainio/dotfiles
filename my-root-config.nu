@@ -1,4 +1,8 @@
-# this is my nushell starting point. I have it checked out in /r/dotfiles.
+# This is my nushell starting point. I have it checked out in /r/dotfiles.
+# Take it to use by running: 
+# config nu
+# and then add this line to the file:
+# source /r/dotfiles/my-root-config.nu
  
 # on windows, you want to have the --wait here so the editor doesn't return before time.
 # ctrl+o editing hoesn't work without it.
