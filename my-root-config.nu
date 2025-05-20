@@ -34,3 +34,8 @@ use ($comp + "rg/rg-completions.nu") *
 # Some libs I'm using from std lib
 
 use std-rfc/kv *
+
+
+# activate virtualenv in current dir
+
+alias act = overlay use .venv/Scripts/activate.nu
