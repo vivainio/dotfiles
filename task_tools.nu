@@ -48,7 +48,7 @@ def run_tasks [
 # Run tasks.py in current directory or parent directory
 # If a virtual environment is found, uv will be used to run the script
 # Otherwise, it will run with the system Python
-export def pt [
+export def --wrapped pt [
   task?: string@tasks_complete  #the task name
   ...args  #additional arguments to pass to the task
 ] {
