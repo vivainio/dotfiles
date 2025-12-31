@@ -11,3 +11,9 @@ source ~/.cache/zoxide.nu
 
 # activate virtualenv in current dir (Linux uses bin instead of Scripts)
 alias act = overlay use .venv/bin/activate.nu
+alias uu = uv run
+alias di = git diff
+alias gl = git log --stat
+alias st = git status
+# if you are using "python tasks.py dostuff", iykyk
+use task_tools.nu pt
