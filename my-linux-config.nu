@@ -15,5 +15,7 @@ alias uu = uv run
 alias di = git diff
 alias gl = git log --stat
 alias st = git status
+alias lg = lazygit
+alias ws = tmux new-session -s
 # if you are using "python tasks.py dostuff", iykyk
 use task_tools.nu pt
