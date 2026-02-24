@@ -16,16 +16,22 @@ set previewer ~/dotfiles/lf/preview
 # toggle hidden files
 map . set hidden!
 
-# open: $EDITOR for text, xdg-open fallback
+# open: bat for text, xdg-open fallback
 cmd open ${{
     mime=$(file --brief --mime-type "$f")
     case "$mime" in
         text/*|application/json|application/javascript|application/xml|application/x-shellscript)
-            $EDITOR "$f" ;;
+            bat --paging=always "$f" ;;
         *)
             xdg-open "$f" ;;
     esac
 }}
+
+# full-screen preview with bat
+map i $bat --paging=always "$f"
+
+# edit in $EDITOR
+map e $$EDITOR "$f"
 
 # open in VS Code
 map o $code --goto "$f"
