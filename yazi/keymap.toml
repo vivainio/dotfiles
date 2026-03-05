@@ -1,6 +1,6 @@
 "$schema" = "https://yazi-rs.github.io/schemas/keymap.json"
 
 [[manager.keymap]]
-on  = "W"
-run = "max_preview"
-desc = "Toggle max preview"
+on  = "<Right>"
+run = "plugin smart-right"
+desc = "Enter dir or max preview file"
