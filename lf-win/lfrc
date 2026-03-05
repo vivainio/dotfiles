@@ -1,7 +1,7 @@
 set shell sh
 set shellopts '-eu'
 
-source r:/dotfiles/lf/lfrc-common
+source c:/r/dotfiles/lf/lfrc-common
 
 # open: bat for text, start fallback
 cmd open ${{
