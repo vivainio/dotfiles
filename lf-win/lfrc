@@ -4,8 +4,8 @@
 set hidden false
 set icons true
 set ratios 1:2:3
-set shell pwsh
-set shellopts '-NoProfile -Command'
+set shell nu
+set shellopts '-c'
 set scrolloff 10
 set period 1
 set mouse true
@@ -15,26 +15,27 @@ set mouse true
 # toggle hidden files
 map . set hidden!
 
-# open: bat for text, Start-Process fallback
+# open: bat for text, start fallback
 cmd open ${{
-    $textExts = @('.txt','.md','.json','.js','.ts','.py','.lua','.toml','.yaml','.yml','.xml','.csv','.log','.sh','.ps1','.nu','.cfg','.ini','.conf','.rs','.go','.c','.cpp','.h')
-    if ([IO.Path]::GetExtension($env:f).ToLower() -in $textExts) {
-        bat --paging=always $env:f
+    let ext = ($env.f | path parse).extension | str downcase
+    let text_exts = [txt md json js ts py lua toml yaml yml xml csv log sh ps1 nu cfg ini conf rs go c cpp h]
+    if $ext in $text_exts {
+        bat --paging=always $env.f
     } else {
-        Start-Process $env:f
+        start $env.f
     }
 }}
 
 # full-screen bat preview
-map i $bat --paging=always $env:f
+map i $bat --paging=always $env.f
 
 # edit in $EDITOR
-map e $$env:EDITOR $env:f
+map e $run-external $env.EDITOR $env.f
 
 # delete with confirmation
-cmd delete %{{
-    $ans = Read-Host "delete '$env:fx'? [y/N]"
-    if ($ans -eq 'y') { Remove-Item -Recurse -Force $env:fx }
+cmd delete ${{
+    let ans = (input $"delete '($env.fx)'? [y/N] ")
+    if $ans == "y" { $env.fx | lines | each {|f| rm -r $f } }
 }}
 map D delete
 
@@ -47,12 +48,12 @@ map I rename-at-start
 map r rename-clear
 
 # yank path to clipboard
-cmd yank-path ${{ $env:f | Set-Clipboard }}
+cmd yank-path ${{ $env.f | clip }}
 map Y yank-path
 
 # mkdir
-cmd mkdir %{{
-    $name = Read-Host "directory name"
-    New-Item -ItemType Directory -Path $name
+cmd mkdir ${{
+    let name = (input "directory name: ")
+    mkdir $name
 }}
 map <c-n> mkdir
