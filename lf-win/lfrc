@@ -4,7 +4,7 @@ set shellopts '-eu'
 
 source ../lf/lfrc-common
 
-set previewer preview
+set previewer ../lf/preview
 
 # open: bat for text, start fallback
 cmd open ${{
