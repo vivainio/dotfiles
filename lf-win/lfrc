@@ -2,9 +2,9 @@ set shell sh
 set shellflag '-c'
 set shellopts '-eu'
 
-source $DOTFILES/lf/lfrc-common
+source ../lf/lfrc-common
 
-set previewer $DOTFILES/lf-win/preview
+set previewer preview
 
 # open: bat for text, start fallback
 cmd open ${{

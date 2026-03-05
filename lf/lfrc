@@ -1,6 +1,6 @@
-source ~/dotfiles/lf/lfrc-common
+source lfrc-common
 
-set previewer ~/dotfiles/lf/preview
+set previewer preview
 
 # open: bat for text, xdg-open fallback
 cmd open ${{
