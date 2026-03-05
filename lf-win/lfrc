@@ -1,3 +1,6 @@
+set shell sh
+set shellopts '-eu'
+
 source /r/dotfiles/lf/lfrc-common
 
 # open: bat for text, start fallback
