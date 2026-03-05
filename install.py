@@ -16,7 +16,7 @@ SYMLINKS_LINUX = [
 SYMLINKS_WINDOWS = [
     # (source in dotfiles, target in home)
     ("yazi-win", "AppData/Roaming/yazi/config"),
-    ("lf-win/lfrc", "AppData/Roaming/lf/lfrc"),
+    ("lf-win", "AppData/Roaming/lf"),
 ]
 
 
