@@ -1,4 +1,5 @@
 set shell sh
+set shellflag '-c'
 set shellopts '-eu'
 
 source c:/r/dotfiles/lf/lfrc-common
