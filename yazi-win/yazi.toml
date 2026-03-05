@@ -1,0 +1,44 @@
+"$schema" = "https://yazi-rs.github.io/schemas/yazi.json"
+
+[mgr]
+ratio         = [ 1, 4, 3 ]
+sort_by       = "alphabetical"
+sort_dir_first = true
+show_hidden   = false
+show_symlink  = true
+scrolloff     = 5
+title_format  = "Yazi: {cwd}"
+
+[preview]
+wrap       = "no"
+tab_size   = 2
+max_width  = 600
+max_height = 900
+
+[opener]
+bat = [
+	{ run = "bat --paging always %s", desc = "bat", for = "windows", block = true },
+]
+edit = [
+	{ run = "%EDITOR% %s", desc = "$EDITOR", for = "windows", block = true },
+]
+open = [
+	{ run = 'start "" %s', desc = "Open", for = "windows" },
+]
+reveal = [
+	{ run = "explorer /select,%s", desc = "Reveal", for = "windows" },
+]
+extract = [
+	{ run = "ya pub extract --list %s", desc = "Extract here" },
+]
+
+[open]
+rules = [
+	{ url = "*/",                use = [ "edit", "open", "reveal" ] },
+	{ mime = "text/*",           use = [ "bat", "edit", "reveal" ] },
+	{ mime = "image/*",          use = [ "open", "reveal" ] },
+	{ mime = "{audio,video}/*",  use = [ "open", "reveal" ] },
+	{ mime = "application/{json,ndjson}", use = [ "bat", "edit", "reveal" ] },
+	{ mime = "*/javascript",     use = [ "bat", "edit", "reveal" ] },
+	{ mime = "*",                use = [ "open", "reveal" ] },
+]
