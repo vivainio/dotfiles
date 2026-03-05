@@ -4,6 +4,8 @@ set shellopts '-eu'
 
 source c:/r/dotfiles/lf/lfrc-common
 
+set previewer c:/r/dotfiles/lf-win/preview.bat
+
 # open: bat for text, start fallback
 cmd open ${{
     case "$f" in

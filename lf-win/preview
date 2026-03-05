@@ -1,0 +1,20 @@
+#!/bin/sh
+# lf previewer for Windows — bat for text, ls for dirs
+
+file="$1"
+width="$2"
+height="$3"
+
+if [ -d "$file" ]; then
+    ls -1A --color=always "$file" | head -n "$height"
+    exit 0
+fi
+
+case "$file" in
+    *.txt|*.md|*.json|*.js|*.ts|*.py|*.lua|*.toml|*.yaml|*.yml|*.xml|*.csv|*.log|*.sh|*.ps1|*.nu|*.cfg|*.ini|*.conf|*.rs|*.go|*.c|*.cpp|*.h)
+        bat --color=always --style=numbers --terminal-width="$width" --line-range=:"$height" "$file"
+        ;;
+    *)
+        ls -lh "$file" | awk '{print "size: " $5}'
+        ;;
+esac
