@@ -14,9 +14,6 @@ cmd open ${{
     esac
 }}
 
-# debug: show which shell is running
-map gs %{{ echo "shell: $0" }}
-
 # yank path to clipboard
 cmd yank-path ${{ printf '%s' "$f" | clip }}
 map Y yank-path
