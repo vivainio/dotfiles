@@ -1,59 +1,15 @@
-# lf Windows config
-
-# ── Settings ──────────────────────────────────────────────
-set hidden false
-set icons true
-set ratios 1:2:3
-set shell nu
-set shellopts '-c'
-set scrolloff 10
-set period 1
-set mouse true
-
-# ── Keybindings ───────────────────────────────────────────
-
-# toggle hidden files
-map . set hidden!
+source ~/dotfiles/lf/lfrc-common
 
 # open: bat for text, start fallback
 cmd open ${{
-    let ext = ($env.f | path parse).extension | str downcase
-    let text_exts = [txt md json js ts py lua toml yaml yml xml csv log sh ps1 nu cfg ini conf rs go c cpp h]
-    if $ext in $text_exts {
-        bat --paging=always $env.f
-    } else {
-        start $env.f
-    }
+    case "$f" in
+        *.txt|*.md|*.json|*.js|*.ts|*.py|*.lua|*.toml|*.yaml|*.yml|*.xml|*.csv|*.log|*.sh|*.ps1|*.nu|*.cfg|*.ini|*.conf|*.rs|*.go|*.c|*.cpp|*.h)
+            bat --paging=always "$f" ;;
+        *)
+            start "" "$f" ;;
+    esac
 }}
-
-# full-screen bat preview
-map i $bat --paging=always $env.f
-
-# edit in $EDITOR
-map e $run-external $env.EDITOR $env.f
-
-# delete with confirmation
-cmd delete ${{
-    let ans = (input $"delete '($env.fx)'? [y/N] ")
-    if $ans == "y" { $env.fx | lines | each {|f| rm -r $f } }
-}}
-map D delete
-
-# rename variants
-cmd rename-at-end :rename
-cmd rename-at-start :rename; cmd-home
-cmd rename-clear :rename; cmd-delete-home
-map A rename-at-end
-map I rename-at-start
-map r rename-clear
 
 # yank path to clipboard
-cmd yank-path ${{ $env.f | clip }}
+cmd yank-path ${{ printf '%s' "$f" | clip }}
 map Y yank-path
-
-# mkdir
-cmd mkdir ${{
-    let name = (input "directory name: ")
-    mkdir $name
-}}
-map <c-n> mkdir

@@ -1,0 +1,58 @@
+# ── Settings ──────────────────────────────────────────────
+set hidden false
+set icons true
+set ratios 1:2:3
+set shell sh
+set shellopts '-eu'
+set scrolloff 10
+set period 1
+set mouse true
+
+# ── Keybindings ───────────────────────────────────────────
+
+# toggle hidden files
+map . set hidden!
+
+# full-screen preview with bat
+map i $bat --paging=always "$f"
+
+# edit in $EDITOR
+map e $$EDITOR "$f"
+
+# delete with confirmation
+cmd delete %{{
+    printf "delete '$fx'? [y/N] "
+    read -r ans
+    [ "$ans" = "y" ] && rm -rf $fx
+}}
+map D delete
+
+# rename variants
+cmd rename-at-end :rename
+cmd rename-at-start :rename; cmd-home
+cmd rename-clear :rename; cmd-delete-home
+map A rename-at-end
+map I rename-at-start
+map r rename-clear
+
+# mkdir
+cmd mkdir %{{
+    printf "directory name: "
+    read -r name
+    mkdir -p "$name"
+}}
+map <c-n> mkdir
+
+# fzf jump to file
+cmd fzf-jump ${{
+    sel=$(fzf --height=40% --reverse)
+    [ -n "$sel" ] && lf -remote "send $id select \"$sel\""
+}}
+map f fzf-jump
+
+# fzf grep content (rg + fzf)
+cmd fzf-grep ${{
+    sel=$(rg --files-with-matches --no-messages . | fzf --height=40% --reverse --preview 'bat --color=always --style=numbers {}')
+    [ -n "$sel" ] && lf -remote "send $id select \"$sel\""
+}}
+map F fzf-grep
