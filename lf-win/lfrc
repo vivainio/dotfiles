@@ -1,0 +1,58 @@
+# lf Windows config
+
+# ── Settings ──────────────────────────────────────────────
+set hidden false
+set icons true
+set ratios 1:2:3
+set shell pwsh
+set shellopts '-NoProfile -Command'
+set scrolloff 10
+set period 1
+set mouse true
+
+# ── Keybindings ───────────────────────────────────────────
+
+# toggle hidden files
+map . set hidden!
+
+# open: bat for text, Start-Process fallback
+cmd open ${{
+    $textExts = @('.txt','.md','.json','.js','.ts','.py','.lua','.toml','.yaml','.yml','.xml','.csv','.log','.sh','.ps1','.nu','.cfg','.ini','.conf','.rs','.go','.c','.cpp','.h')
+    if ([IO.Path]::GetExtension($env:f).ToLower() -in $textExts) {
+        bat --paging=always $env:f
+    } else {
+        Start-Process $env:f
+    }
+}}
+
+# full-screen bat preview
+map i $bat --paging=always $env:f
+
+# edit in $EDITOR
+map e $$env:EDITOR $env:f
+
+# delete with confirmation
+cmd delete %{{
+    $ans = Read-Host "delete '$env:fx'? [y/N]"
+    if ($ans -eq 'y') { Remove-Item -Recurse -Force $env:fx }
+}}
+map D delete
+
+# rename variants
+cmd rename-at-end :rename
+cmd rename-at-start :rename; cmd-home
+cmd rename-clear :rename; cmd-delete-home
+map A rename-at-end
+map I rename-at-start
+map r rename-clear
+
+# yank path to clipboard
+cmd yank-path ${{ $env:f | Set-Clipboard }}
+map Y yank-path
+
+# mkdir
+cmd mkdir %{{
+    $name = Read-Host "directory name"
+    New-Item -ItemType Directory -Path $name
+}}
+map <c-n> mkdir
