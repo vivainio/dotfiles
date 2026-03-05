@@ -1,4 +1,4 @@
-source ~/dotfiles/lf/lfrc-common
+source /r/dotfiles/lf/lfrc-common
 
 # open: bat for text, start fallback
 cmd open ${{
