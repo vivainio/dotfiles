@@ -9,6 +9,7 @@ HOME = Path.home()
 SYMLINKS = [
     # (source in dotfiles, target in home)
     ("tmux.conf", ".tmux.conf"),
+    ("yazi", ".config/yazi"),
 ]
 
 
@@ -30,6 +31,7 @@ def create_symlink(source: str, target: str) -> None:
         dst.rename(backup)
         print(f"  BACKUP: {target} -> {backup.name}")
 
+    dst.parent.mkdir(parents=True, exist_ok=True)
     dst.symlink_to(src)
     print(f"  LINK: {target} -> {source}")
 
