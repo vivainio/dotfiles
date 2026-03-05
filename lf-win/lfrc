@@ -1,7 +1,7 @@
 set shell sh
 set shellopts '-eu'
 
-source /r/dotfiles/lf/lfrc-common
+source r:/dotfiles/lf/lfrc-common
 
 # open: bat for text, start fallback
 cmd open ${{
@@ -12,6 +12,9 @@ cmd open ${{
             start "" "$f" ;;
     esac
 }}
+
+# debug: show which shell is running
+map gs %{{ echo "shell: $0" }}
 
 # yank path to clipboard
 cmd yank-path ${{ printf '%s' "$f" | clip }}
