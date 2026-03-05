@@ -11,12 +11,13 @@ SYMLINKS_LINUX = [
     # (source in dotfiles, target in home)
     ("tmux.conf", ".tmux.conf"),
     ("yazi", ".config/yazi"),
+    ("lf", ".config/lf"),
 ]
 
 SYMLINKS_WINDOWS = [
     # (source in dotfiles, target in home)
     ("yazi-win", "AppData/Roaming/yazi/config"),
-    ("lf-win", "AppData/Roaming/lf"),
+    ("lf", "AppData/Roaming/lf"),
 ]
 
 

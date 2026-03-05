@@ -1,24 +1,20 @@
 source lfrc-common
 
+set shellflag '-c'
 set previewer preview
 
-# open: bat for text, xdg-open fallback
-cmd open ${{
-    mime=$(file --brief --mime-type "$f")
-    case "$mime" in
-        text/*|application/json|application/javascript|application/xml|application/x-shellscript)
-            bat --paging=always "$f" ;;
-        *)
-            xdg-open "$f" ;;
-    esac
-}}
+# open with bat
+cmd open ${{ bat --paging=always "$f" }}
 
 # open in VS Code
 map o $code --goto "$f"
 
 # yank path to clipboard
 cmd yank-path ${{
-    printf '%s' "$f" | clip.exe 2>/dev/null || printf '%s' "$f" | xclip -selection clipboard
+    case "$(uname -s)" in
+        Linux) printf '%s' "$f" | clip.exe 2>/dev/null || printf '%s' "$f" | xclip -selection clipboard ;;
+        *)     printf '%s' "$f" | clip ;;
+    esac
 }}
 map Y yank-path
 
