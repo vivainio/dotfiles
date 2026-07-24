@@ -1,0 +1,8 @@
+[keys.normal]
+Z = { Z = ":write-quit" }
+
+[keys.normal.space]
+C = ":sh echo -n '%{buffer_name}:%{selection_line_start}-%{selection_line_end}' | clip.exe"
+
+[keys.select.space]
+C = ":sh echo -n '%{buffer_name}:%{selection_line_start}-%{selection_line_end}' | clip.exe"

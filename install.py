@@ -12,6 +12,7 @@ SYMLINKS_LINUX = [
     ("tmux.conf", ".tmux.conf"),
     ("yazi", ".config/yazi"),
     ("lf", ".config/lf"),
+    ("helix/config.toml", ".config/helix/config.toml"),
 ]
 
 SYMLINKS_WINDOWS = [
