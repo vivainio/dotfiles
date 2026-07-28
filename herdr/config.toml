@@ -44,7 +44,7 @@ split_horizontal = "prefix+minus"
 [[keys.command]]
 key = "prefix+ctrl+g"
 type = "popup"
-command = "or --local"
+command = "lazygit"
 width = "100%"
 height = "80%"
 
@@ -63,11 +63,27 @@ width = "100%"
 height = "80%"
 
 [[keys.command]]
+key = "prefix+ctrl+r"
+type = "plugin_action"
+command = "persiyanov.reviewr.toggle"
+
+[[keys.command]]
 key = "prefix+m"
 type = "popup"
 command = "MENYY_POPUP=1 menyy"
 width = "90%"
 height = "80%"
 
+[[keys.command]]              # open in a split beside your work
+key = "prefix+f"
+type = "shell"
+command = "herdr plugin action invoke open-file-viewer --plugin herdr-file-viewer"
+
+[[keys.command]]              # …or in its own tab
+key = "prefix+shift+f"
+type = "shell"
+command = "herdr plugin action invoke open-file-viewer-tab --plugin herdr-file-viewer"
+
 [ui]
 mouse_capture = true
+agent_panel_sort = "spaces"
