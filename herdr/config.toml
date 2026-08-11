@@ -30,6 +30,10 @@ previous_workspace = "alt+up"
 next_workspace = "alt+down"
 close_workspace = "prefix+shift+k"
 
+# Move through agents in the sidebar.
+previous_agent = "alt+shift+up"
+next_agent = "alt+shift+down"
+
 # tmux: prefix + x
 close_pane = "prefix+x"
 
@@ -47,6 +51,7 @@ type = "popup"
 command = "lazygit"
 width = "100%"
 height = "80%"
+
 
 [[keys.command]]
 key = "prefix+ctrl+l"
