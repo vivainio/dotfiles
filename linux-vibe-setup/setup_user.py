@@ -25,6 +25,8 @@ ZIPGET_URL = (
     "zipget-linux-x64-musl"
 )
 CLAUDE_INSTALL_URL = "https://claude.ai/install.sh"
+COPILOT_INSTALL_URL = "https://gh.io/copilot-install"
+UV_INSTALL_URL = "https://astral.sh/uv/install.sh"
 
 
 def log(message: str) -> None:
@@ -132,6 +134,24 @@ def install_claude_code(temp: Path) -> None:
     run("bash", str(installer))
 
 
+def install_copilot(temp: Path) -> None:
+    installer = temp / "install-copilot.sh"
+    download(COPILOT_INSTALL_URL, installer)
+    env = {**os.environ, "PREFIX": str(HOME / ".local")}
+    run("bash", str(installer), env=env)
+
+
+def install_uv(temp: Path) -> None:
+    installer = temp / "install-uv.sh"
+    download(UV_INSTALL_URL, installer)
+    env = {
+        **os.environ,
+        "UV_INSTALL_DIR": str(LOCAL_BIN),
+        "UV_NO_MODIFY_PATH": "1",
+    }
+    run("sh", str(installer), env=env)
+
+
 def main() -> None:
     if os.geteuid() == 0:
         sys.exit("setup_user.py must run as the target user, not root")
@@ -146,20 +166,8 @@ def main() -> None:
         temp = Path(temp_name)
         install_node(temp)
         install_claude_code(temp)
-
-    path = f"{LOCAL_BIN}:{NODE_ROOT / 'bin'}:{os.environ.get('PATH', '')}"
-    npm_env = {**os.environ, "PATH": path, "npm_config_prefix": str(HOME / ".local")}
-    run("npm", "config", "set", "prefix", str(HOME / ".local"), env=npm_env)
-    run(
-        "npm",
-        "install",
-        "--global",
-        "@github/copilot",
-        env=npm_env,
-    )
-
-    log("installing uv and uvx with pipx")
-    run("pipx", "install", "--force", "uv")
+        install_copilot(temp)
+        install_uv(temp)
 
     log("user setup complete; authenticate claude, copilot, and gh interactively")
 

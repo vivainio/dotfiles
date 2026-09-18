@@ -67,10 +67,10 @@ Per user, the setup installs:
 - the latest available Node.js 22 release, with its published SHA-256 checksum
   verified before extraction;
 - Claude Code, using Anthropic's recommended native installer;
-- GitHub Copilot CLI (`@github/copilot`);
+- GitHub Copilot CLI, using GitHub's native install script;
 - Astral `uv` and `uvx`.
 
-Node 22 is used because GitHub Copilot CLI requires Node.js 22 or newer.
+Node 22 is installed as the general-purpose JavaScript runtime.
 CShip is installed only; the setup does not create a CShip theme or modify
 Claude Code's `statusLine` setting.
 
