@@ -35,6 +35,7 @@ PACKAGES = (
     "podman",
     "python3",
     "python3-venv",
+    "python-is-python3",
     "rsync",
     "shellcheck",
     "slirp4netns",
