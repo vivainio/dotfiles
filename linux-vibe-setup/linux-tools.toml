@@ -1,15 +1,14 @@
 # zipget recipe for native Ubuntu development tools
 # Install with: zipget recipe linux-tools.toml
 #
-# Asset names are templated on the host CPU. setup_user.py overrides the
-# defaults on arm64 hosts with:
-#   zipget recipe --set arch=aarch64 --set goarch=arm64 linux-tools.toml
+# Asset names are templated on the host CPU. ${arch} is zipget's built-in
+# variable and resolves to x86_64 or aarch64 by itself; only the Go-style
+# name fzf uses needs help, which setup_user.py supplies on arm64 hosts:
+#   zipget recipe --set goarch=arm64 linux-tools.toml
 
 [vars]
 bin_dir = "~/.local/bin"
-# Rust/LLVM-style target architecture, used by most projects below.
-arch = "x86_64"
-# Go-style architecture name, used by fzf.
+# Go-style architecture name, used by fzf. Built-in ${arch} covers the rest.
 goarch = "amd64"
 
 [herdr]
