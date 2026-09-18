@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Initialize environment by symlinking dotfiles."""
 
+import os
 import sys
 from pathlib import Path
 
@@ -13,12 +14,14 @@ SYMLINKS_LINUX = [
     ("yazi", ".config/yazi"),
     ("lf", ".config/lf"),
     ("helix/config.toml", ".config/helix/config.toml"),
+    ("herdr/config.toml", ".config/herdr/config.toml"),
 ]
 
 SYMLINKS_WINDOWS = [
     # (source in dotfiles, target in home)
     ("yazi-win", "AppData/Roaming/yazi/config"),
     ("lf", "AppData/Roaming/lf"),
+    ("herdr/config.toml", "AppData/Roaming/herdr/config.toml"),
 ]
 
 
@@ -41,8 +44,14 @@ def create_symlink(source: str, target: str) -> None:
         print(f"  BACKUP: {target} -> {backup.name}")
 
     dst.parent.mkdir(parents=True, exist_ok=True)
-    dst.symlink_to(src)
-    print(f"  LINK: {target} -> {source}")
+    try:
+        dst.symlink_to(src)
+        print(f"  LINK: {target} -> {source}")
+    except OSError as error:
+        if sys.platform != "win32" or error.winerror != 1314:
+            raise
+        os.link(src, dst)
+        print(f"  HARD LINK: {target} -> {source} (symlink privilege unavailable)")
 
 
 def main() -> None:
