@@ -14,6 +14,7 @@ from pathlib import Path
 SUBID_START = 100_000
 SUBID_COUNT = 65_536
 USERNAME = re.compile(r"[a-z_][a-z0-9_-]{0,31}")
+UBUNTU_CODENAME = "noble"
 
 PACKAGES = (
     "acl",
@@ -63,6 +64,13 @@ def os_release() -> dict[str, str]:
             key, value = line.split("=", 1)
             values[key] = value.strip('"')
     return values
+
+
+def is_supported(release: dict[str, str]) -> bool:
+    """Accept Ubuntu 24.04 and derivatives built on it, such as Linux Mint 22."""
+    if release.get("UBUNTU_CODENAME") == UBUNTU_CODENAME:
+        return True
+    return release.get("ID") == "ubuntu" and release.get("VERSION_ID") == "24.04"
 
 
 def allocated_ranges(path: Path) -> list[tuple[int, int]]:
@@ -127,9 +135,9 @@ def main() -> None:
         sys.exit("setup_system.py must run as root")
 
     release = os_release()
-    if release.get("ID") != "ubuntu" or release.get("VERSION_ID") != "24.04":
+    if not is_supported(release):
         sys.exit(
-            "Ubuntu 24.04 is required "
+            f"Ubuntu 24.04 ({UBUNTU_CODENAME}) or a derivative of it is required "
             f"(found {release.get('ID', 'unknown')} {release.get('VERSION_ID', 'unknown')})"
         )
 

@@ -2,6 +2,9 @@
 
 Repeatable bootstrap for a native Ubuntu 24.04 coding-agent host. It provides
 rootless Podman and installs AI command-line tools for each Unix user.
+Derivatives that track the same package set are supported too: the system
+script accepts any distribution reporting `UBUNTU_CODENAME=noble`, such as
+Linux Mint 22.
 
 The scripts are intentionally split by privilege:
 
