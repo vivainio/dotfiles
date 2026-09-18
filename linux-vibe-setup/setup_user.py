@@ -16,22 +16,20 @@ from pathlib import Path
 
 NODE_MAJOR = 22
 # Each download source names architectures differently: "node" is the Node.js
-# dist naming, "arch" the Rust/LLVM target used by most GitHub releases, and
-# "goarch" the Go naming that fzf publishes under.
+# dist naming, "zipget" the zipget-rs release naming, and "goarch" the Go
+# naming that fzf publishes under. The rest of linux-tools.toml relies on
+# zipget's own built-in ${arch}, so no entry is needed for it here.
 ARCHITECTURES = {
-    "x86_64": {"node": "x64", "arch": "x86_64", "goarch": "amd64"},
-    "aarch64": {"node": "arm64", "arch": "aarch64", "goarch": "arm64"},
-    "arm64": {"node": "arm64", "arch": "aarch64", "goarch": "arm64"},
+    "x86_64": {"node": "x64", "zipget": "linux-x64-musl", "goarch": "amd64"},
+    "aarch64": {"node": "arm64", "zipget": "linux-arm64-musl", "goarch": "arm64"},
+    "arm64": {"node": "arm64", "zipget": "linux-arm64-musl", "goarch": "arm64"},
 }
 HOME = Path.home()
 LOCAL_BIN = HOME / ".local" / "bin"
 NODE_ROOT = HOME / ".local" / "share" / f"node-v{NODE_MAJOR}"
 SCRIPT_DIR = Path(__file__).resolve().parent
 TOOLS_RECIPE = SCRIPT_DIR / "linux-tools.toml"
-ZIPGET_URL = (
-    "https://github.com/vivainio/zipget-rs/releases/latest/download/"
-    "zipget-linux-x64-musl"
-)
+ZIPGET_URL = "https://github.com/vivainio/zipget-rs/releases/latest/download/zipget-{}"
 CLAUDE_INSTALL_URL = "https://claude.ai/install.sh"
 COPILOT_INSTALL_URL = "https://gh.io/copilot-install"
 UV_INSTALL_URL = "https://astral.sh/uv/install.sh"
@@ -108,7 +106,7 @@ def install_node(temp: Path) -> None:
 def install_zipget() -> Path:
     zipget = LOCAL_BIN / "zipget"
     if not zipget.exists():
-        download(ZIPGET_URL, zipget)
+        download(ZIPGET_URL.format(architecture()["zipget"]), zipget)
         zipget.chmod(0o755)
     return zipget
 
@@ -122,8 +120,6 @@ def install_recipe_tools(zipget: Path) -> None:
         run(
             str(zipget),
             "recipe",
-            "--set",
-            f"arch={names['arch']}",
             "--set",
             f"goarch={names['goarch']}",
             str(TOOLS_RECIPE),
