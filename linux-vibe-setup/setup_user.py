@@ -19,11 +19,12 @@ HOME = Path.home()
 LOCAL_BIN = HOME / ".local" / "bin"
 NODE_ROOT = HOME / ".local" / "share" / f"node-v{NODE_MAJOR}"
 SCRIPT_DIR = Path(__file__).resolve().parent
-TOOLS_RECIPE = SCRIPT_DIR / "wsl-tools.toml"
+TOOLS_RECIPE = SCRIPT_DIR / "linux-tools.toml"
 ZIPGET_URL = (
     "https://github.com/vivainio/zipget-rs/releases/latest/download/"
     "zipget-linux-x64-musl"
 )
+CLAUDE_INSTALL_URL = "https://claude.ai/install.sh"
 
 
 def log(message: str) -> None:
@@ -104,21 +105,31 @@ def install_zipget() -> Path:
 def install_recipe_tools(zipget: Path) -> None:
     if not TOOLS_RECIPE.is_file():
         sys.exit(f"missing zipget recipe: {TOOLS_RECIPE}")
-    run(str(zipget), "recipe", str(TOOLS_RECIPE), cwd=SCRIPT_DIR)
+    with tempfile.TemporaryDirectory(prefix="linux-tools-") as stage_name:
+        stage = Path(stage_name)
+        run(str(zipget), "recipe", str(TOOLS_RECIPE), cwd=stage)
 
-    aws_installer = SCRIPT_DIR / "aws-cli-installer" / "aws" / "install"
-    if not aws_installer.is_file():
-        sys.exit(f"zipget did not produce the AWS CLI installer at {aws_installer}")
-    args = [
-        str(aws_installer),
-        "--install-dir",
-        str(HOME / ".local" / "aws-cli"),
-        "--bin-dir",
-        str(LOCAL_BIN),
-    ]
-    if (HOME / ".local" / "aws-cli").exists():
-        args.append("--update")
-    run(*args)
+        aws_installer = stage / "aws-cli-installer" / "aws" / "install"
+        if not aws_installer.is_file():
+            sys.exit(
+                f"zipget did not produce the AWS CLI installer at {aws_installer}"
+            )
+        args = [
+            str(aws_installer),
+            "--install-dir",
+            str(HOME / ".local" / "aws-cli"),
+            "--bin-dir",
+            str(LOCAL_BIN),
+        ]
+        if (HOME / ".local" / "aws-cli").exists():
+            args.append("--update")
+        run(*args)
+
+
+def install_claude_code(temp: Path) -> None:
+    installer = temp / "install-claude-code.sh"
+    download(CLAUDE_INSTALL_URL, installer)
+    run("bash", str(installer))
 
 
 def main() -> None:
@@ -132,7 +143,9 @@ def main() -> None:
     install_recipe_tools(zipget)
 
     with tempfile.TemporaryDirectory(prefix="linux-vibe-setup-") as temp_name:
-        install_node(Path(temp_name))
+        temp = Path(temp_name)
+        install_node(temp)
+        install_claude_code(temp)
 
     path = f"{LOCAL_BIN}:{NODE_ROOT / 'bin'}:{os.environ.get('PATH', '')}"
     npm_env = {**os.environ, "PATH": path, "npm_config_prefix": str(HOME / ".local")}
@@ -141,7 +154,6 @@ def main() -> None:
         "npm",
         "install",
         "--global",
-        "@anthropic-ai/claude-code",
         "@github/copilot",
         env=npm_env,
     )

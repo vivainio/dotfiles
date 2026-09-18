@@ -62,11 +62,11 @@ enabled.
 Per user, the setup installs:
 
 - `zipget`, bootstrapped from its official GitHub release, followed by every
-  tool declared in `wsl-tools.toml` (including AWS CLI, Herdr, CShip,
+  tool declared in `linux-tools.toml` (including AWS CLI, Herdr, CShip,
   starship, ripgrep, fd, bat, fzf, zoxide, and delta);
 - the latest available Node.js 22 release, with its published SHA-256 checksum
   verified before extraction;
-- Claude Code (`@anthropic-ai/claude-code`);
+- Claude Code, using Anthropic's recommended native installer;
 - GitHub Copilot CLI (`@github/copilot`);
 - Astral `uv` and `uvx`.
 
