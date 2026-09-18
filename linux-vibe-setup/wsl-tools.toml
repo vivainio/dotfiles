@@ -1,0 +1,88 @@
+# zipget recipe for native Ubuntu development tools
+# Install with: zipget recipe wsl-tools.toml
+
+[herdr]
+# Agent multiplexer - https://herdr.dev
+github = { repo = "herdrdev/herdr", asset = "herdr-linux-x86_64" }
+save_as = "./tools/herdr"
+executable = true
+install_exes = ["herdr"]
+no_shim = true
+
+[cship]
+# Claude Code statusline - https://cship.dev
+github = { repo = "stephenleo/cship", asset = "cship-x86_64-unknown-linux-musl" }
+save_as = "./tools/cship"
+executable = true
+install_exes = ["cship"]
+no_shim = true
+
+[microsoft-edit]
+# Terminal-based text editor - https://github.com/microsoft/edit
+# Note: only gnu builds available (no musl)
+github = { repo = "microsoft/edit", asset = "x86_64-linux-gnu.tar.zst" }
+unzip_to = "./tools"
+files = "edit"
+install_exes = ["edit"]
+no_shim = true
+
+[starship]
+# Cross-shell prompt - https://github.com/starship/starship
+github = { repo = "starship/starship", asset = "x86_64-unknown-linux-musl.tar.gz" }
+unzip_to = "./tools"
+files = "starship"
+install_exes = ["starship"]
+no_shim = true
+
+[ripgrep]
+# Fast regex search tool - https://github.com/BurntSushi/ripgrep
+github = { repo = "BurntSushi/ripgrep", asset = "x86_64-unknown-linux-musl.tar.gz" }
+unzip_to = "./tools"
+files = "*/rg"
+install_exes = ["rg"]
+no_shim = true
+
+[fd]
+# Fast find alternative - https://github.com/sharkdp/fd
+github = { repo = "sharkdp/fd", asset = "x86_64-unknown-linux-musl.tar.gz" }
+unzip_to = "./tools"
+files = "*/fd"
+install_exes = ["fd"]
+no_shim = true
+
+[bat]
+# Cat with syntax highlighting - https://github.com/sharkdp/bat
+github = { repo = "sharkdp/bat", asset = "x86_64-unknown-linux-musl.tar.gz" }
+unzip_to = "./tools"
+files = "*/bat"
+install_exes = ["bat"]
+no_shim = true
+
+[fzf]
+# Fuzzy finder - https://github.com/junegunn/fzf
+github = { repo = "junegunn/fzf", asset = "linux_amd64.tar.gz" }
+unzip_to = "./tools"
+files = "fzf"
+install_exes = ["fzf"]
+no_shim = true
+
+[zoxide]
+# Smarter cd command - https://github.com/ajeetdsouza/zoxide
+github = { repo = "ajeetdsouza/zoxide", asset = "x86_64-unknown-linux-musl.tar.gz" }
+unzip_to = "./tools"
+files = "zoxide"
+install_exes = ["zoxide"]
+no_shim = true
+
+[delta]
+# Git diff viewer - https://github.com/dandavison/delta
+github = { repo = "dandavison/delta", asset = "x86_64-unknown-linux-musl.tar.gz" }
+unzip_to = "./tools"
+files = "*/delta"
+install_exes = ["delta"]
+no_shim = true
+
+[aws-cli]
+# AWS CLI v2 - official installer
+url = "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip"
+unzip_to = "./aws-cli-installer"
