@@ -1,75 +1,72 @@
 # zipget recipe for native Ubuntu development tools
 # Install with: zipget recipe linux-tools.toml
 #
-# Asset names are templated on the host CPU. ${arch} is zipget's built-in
-# variable and resolves to x86_64 or aarch64 by itself; only the Go-style
-# name fzf uses needs help, which setup_user.py supplies on arm64 hosts:
-#   zipget recipe --set goarch=arm64 linux-tools.toml
+# Asset names are left to zipget, which picks the right architecture and
+# prefers musl builds. Only the AWS CLI names its own download, and uses
+# zipget's built-in ${arch}.
 
 [vars]
 bin_dir = "~/.local/bin"
-# Go-style architecture name, used by fzf. Built-in ${arch} covers the rest.
-goarch = "amd64"
 
 [herdr]
 # Agent multiplexer - https://herdr.dev
-github = { repo = "herdrdev/herdr", asset = "herdr-linux-${arch}" }
+github = { repo = "herdrdev/herdr" }
 save_as = "${bin_dir}/herdr"
 executable = true
 
 [cship]
 # Claude Code statusline - https://cship.dev
-github = { repo = "stephenleo/cship", asset = "cship-${arch}-unknown-linux-musl" }
+github = { repo = "stephenleo/cship" }
 save_as = "${bin_dir}/cship"
 executable = true
 
 [microsoft-edit]
 # Terminal-based text editor - https://github.com/microsoft/edit
 # Note: only gnu builds available (no musl)
-github = { repo = "microsoft/edit", asset = "${arch}-linux-gnu.tar.gz" }
+github = { repo = "microsoft/edit" }
 unzip_to = "${bin_dir}"
 files = "edit"
 
 [starship]
 # Cross-shell prompt - https://github.com/starship/starship
-github = { repo = "starship/starship", asset = "${arch}-unknown-linux-musl.tar.gz" }
+github = { repo = "starship/starship" }
 unzip_to = "${bin_dir}"
 files = "starship"
 
 [ripgrep]
 # Fast regex search tool - https://github.com/BurntSushi/ripgrep
-github = { repo = "BurntSushi/ripgrep", asset = "${arch}-unknown-linux-musl.tar.gz" }
+github = { repo = "BurntSushi/ripgrep" }
 unzip_to = "${bin_dir}"
 files = "*/rg"
 
 [fd]
 # Fast find alternative - https://github.com/sharkdp/fd
-github = { repo = "sharkdp/fd", asset = "${arch}-unknown-linux-musl.tar.gz" }
+github = { repo = "sharkdp/fd" }
 unzip_to = "${bin_dir}"
 files = "*/fd"
 
 [bat]
 # Cat with syntax highlighting - https://github.com/sharkdp/bat
-github = { repo = "sharkdp/bat", asset = "${arch}-unknown-linux-musl.tar.gz" }
+github = { repo = "sharkdp/bat" }
 unzip_to = "${bin_dir}"
 files = "*/bat"
 
 [fzf]
 # Fuzzy finder - https://github.com/junegunn/fzf
-github = { repo = "junegunn/fzf", asset = "linux_${goarch}.tar.gz" }
+github = { repo = "junegunn/fzf" }
 unzip_to = "${bin_dir}"
 files = "fzf"
 
 [zoxide]
 # Smarter cd command - https://github.com/ajeetdsouza/zoxide
-github = { repo = "ajeetdsouza/zoxide", asset = "${arch}-unknown-linux-musl.tar.gz" }
+github = { repo = "ajeetdsouza/zoxide" }
 unzip_to = "${bin_dir}"
 files = "zoxide"
 
 [delta]
 # Git diff viewer - https://github.com/dandavison/delta
-# Note: gnu rather than musl, because no aarch64 musl build is published
-github = { repo = "dandavison/delta", asset = "${arch}-unknown-linux-gnu.tar.gz" }
+# Note: musl on x86-64, gnu on arm64, which is all delta publishes there
+github = { repo = "dandavison/delta" }
 unzip_to = "${bin_dir}"
 files = "*/delta"
 
