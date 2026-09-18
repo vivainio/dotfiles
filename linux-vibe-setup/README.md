@@ -11,6 +11,8 @@ The scripts are intentionally split by privilege:
   Claude Code, GitHub Copilot CLI, and `uv` under the user's home directory.
 
 Both scripts are safe to run again to repair or update a machine.
+The container build reuses `setup_system.py --packages-only` so its shared
+package set stays aligned without attempting host login-user configuration.
 
 ## Install
 

@@ -9,20 +9,20 @@
 #   podman build -f container/Dockerfile -t linux-vibe-devcontainer .
 #   podman run -it --name devbox linux-vibe-devcontainer
 #
-# Deliberately skips setup_system.py: that script configures rootless-Podman
-# prerequisites (subuid/subgid ranges, loginctl linger) for a real login
-# user on the host. None of that applies inside a container that doesn't
-# itself run nested Podman, and loginctl would fail outright (no systemd).
+# setup_system.py installs the complete shared package set in package-only mode.
+# Host account configuration (subuid/subgid ranges and loginctl linger) is the
+# only part skipped because this container does not run systemd.
 FROM docker.io/library/ubuntu:24.04
 
 ARG USERNAME=dev
 ARG UID=1000
 ARG GID=1000
 
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-    build-essential ca-certificates curl direnv file gh git git-lfs jq less lf \
-    openssh-client python3 python3-venv python-is-python3 rsync \
-    shellcheck unzip xz-utils zip zstd \
+RUN apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends python3
+
+COPY setup_system.py /tmp/linux-vibe-setup/setup_system.py
+RUN python3 /tmp/linux-vibe-setup/setup_system.py --packages-only \
     && rm -rf /var/lib/apt/lists/*
 
 RUN if getent passwd "${UID}" >/dev/null; then \

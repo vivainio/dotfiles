@@ -102,6 +102,11 @@ def ensure_subid(username: str, path: Path, flag: str) -> None:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--packages-only",
+        action="store_true",
+        help="install shared packages without configuring login users",
+    )
     parser.add_argument("users", nargs="*", help="existing Unix users to configure")
     return parser.parse_args()
 
@@ -128,8 +133,11 @@ def main() -> None:
             f"(found {release.get('ID', 'unknown')} {release.get('VERSION_ID', 'unknown')})"
         )
 
-    users = args.users or regular_users()
-    if not args.users:
+    if args.packages_only and args.users:
+        sys.exit("--packages-only cannot be combined with usernames")
+
+    users = [] if args.packages_only else (args.users or regular_users())
+    if not args.packages_only and not args.users:
         log(f"auto-detected login users: {', '.join(users) if users else '(none)'}")
 
     for username in users:
@@ -151,6 +159,10 @@ def main() -> None:
         env=apt_env,
     )
     run("git", "lfs", "install", "--system")
+
+    if args.packages_only:
+        log("package-only system setup complete")
+        return
 
     for username in users:
         log(f"configuring rootless Podman prerequisites for {username}")
