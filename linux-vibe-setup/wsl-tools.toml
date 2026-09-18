@@ -20,7 +20,7 @@ no_shim = true
 [microsoft-edit]
 # Terminal-based text editor - https://github.com/microsoft/edit
 # Note: only gnu builds available (no musl)
-github = { repo = "microsoft/edit", asset = "x86_64-linux-gnu.tar.zst" }
+github = { repo = "microsoft/edit", asset = "x86_64-linux-gnu.tar.gz" }
 unzip_to = "./tools"
 files = "edit"
 install_exes = ["edit"]
