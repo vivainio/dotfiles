@@ -15,14 +15,12 @@ import urllib.request
 from pathlib import Path
 
 NODE_MAJOR = 22
-# Each download source names architectures differently: "node" is the Node.js
-# dist naming, "zipget" the zipget-rs release naming, and "goarch" the Go
-# naming that fzf publishes under. The rest of linux-tools.toml relies on
-# zipget's own built-in ${arch}, so no entry is needed for it here.
+# Node.js and zipget-rs name their release archives differently. Everything
+# in linux-tools.toml is left to zipget, which resolves the host itself.
 ARCHITECTURES = {
-    "x86_64": {"node": "x64", "zipget": "linux-x64-musl", "goarch": "amd64"},
-    "aarch64": {"node": "arm64", "zipget": "linux-arm64-musl", "goarch": "arm64"},
-    "arm64": {"node": "arm64", "zipget": "linux-arm64-musl", "goarch": "arm64"},
+    "x86_64": {"node": "x64", "zipget": "linux-x64-musl"},
+    "aarch64": {"node": "arm64", "zipget": "linux-arm64-musl"},
+    "arm64": {"node": "arm64", "zipget": "linux-arm64-musl"},
 }
 HOME = Path.home()
 LOCAL_BIN = HOME / ".local" / "bin"
@@ -114,17 +112,9 @@ def install_zipget() -> Path:
 def install_recipe_tools(zipget: Path) -> None:
     if not TOOLS_RECIPE.is_file():
         sys.exit(f"missing zipget recipe: {TOOLS_RECIPE}")
-    names = architecture()
     with tempfile.TemporaryDirectory(prefix="linux-tools-") as stage_name:
         stage = Path(stage_name)
-        run(
-            str(zipget),
-            "recipe",
-            "--set",
-            f"goarch={names['goarch']}",
-            str(TOOLS_RECIPE),
-            cwd=stage,
-        )
+        run(str(zipget), "recipe", str(TOOLS_RECIPE), cwd=stage)
 
         aws_installer = stage / "aws-cli-installer" / "aws" / "install"
         if not aws_installer.is_file():
