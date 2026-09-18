@@ -15,6 +15,14 @@ import urllib.request
 from pathlib import Path
 
 NODE_MAJOR = 22
+# Each download source names architectures differently: "node" is the Node.js
+# dist naming, "arch" the Rust/LLVM target used by most GitHub releases, and
+# "goarch" the Go naming that fzf publishes under.
+ARCHITECTURES = {
+    "x86_64": {"node": "x64", "arch": "x86_64", "goarch": "amd64"},
+    "aarch64": {"node": "arm64", "arch": "aarch64", "goarch": "arm64"},
+    "arm64": {"node": "arm64", "arch": "aarch64", "goarch": "arm64"},
+}
 HOME = Path.home()
 LOCAL_BIN = HOME / ".local" / "bin"
 NODE_ROOT = HOME / ".local" / "share" / f"node-v{NODE_MAJOR}"
@@ -49,10 +57,11 @@ def download(url: str, destination: Path) -> None:
         destination.write_bytes(response.read())
 
 
-def node_architecture() -> str:
+def architecture() -> dict[str, str]:
+    """Map the host CPU onto the naming scheme each download source uses."""
     machine = platform.machine().lower()
     try:
-        return {"x86_64": "x64", "aarch64": "arm64", "arm64": "arm64"}[machine]
+        return ARCHITECTURES[machine]
     except KeyError:
         sys.exit(f"unsupported CPU architecture: {machine}")
 
@@ -71,7 +80,7 @@ def install_node(temp: Path) -> None:
     checksums_path = temp / "SHASUMS256.txt"
     download(f"{base_url}/SHASUMS256.txt", checksums_path)
     filename, expected_digest = find_node_archive(
-        checksums_path.read_text(), node_architecture()
+        checksums_path.read_text(), architecture()["node"]
     )
 
     archive = temp / filename
@@ -107,9 +116,19 @@ def install_zipget() -> Path:
 def install_recipe_tools(zipget: Path) -> None:
     if not TOOLS_RECIPE.is_file():
         sys.exit(f"missing zipget recipe: {TOOLS_RECIPE}")
+    names = architecture()
     with tempfile.TemporaryDirectory(prefix="linux-tools-") as stage_name:
         stage = Path(stage_name)
-        run(str(zipget), "recipe", str(TOOLS_RECIPE), cwd=stage)
+        run(
+            str(zipget),
+            "recipe",
+            "--set",
+            f"arch={names['arch']}",
+            "--set",
+            f"goarch={names['goarch']}",
+            str(TOOLS_RECIPE),
+            cwd=stage,
+        )
 
         aws_installer = stage / "aws-cli-installer" / "aws" / "install"
         if not aws_installer.is_file():

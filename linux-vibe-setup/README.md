@@ -75,6 +75,10 @@ Per user, the setup installs:
 - GitHub Copilot CLI, using GitHub's native install script;
 - Astral `uv` and `uvx`.
 
+Both x86-64 and arm64 hosts are supported. `setup_user.py` detects the CPU and
+passes the matching architecture names to the `linux-tools.toml` recipe, so the
+tool set is identical on either.
+
 Node 22 is installed as the general-purpose JavaScript runtime.
 CShip is installed only; the setup does not create a CShip theme or modify
 Claude Code's `statusLine` setting.
