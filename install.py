@@ -17,6 +17,15 @@ SYMLINKS_LINUX = [
     ("herdr/config.toml", ".config/herdr/config.toml"),
 ]
 
+SYMLINKS_MACOS = [
+    ("tmux.conf", ".tmux.conf"),
+    ("yazi", ".config/yazi"),
+    ("lf", ".config/lf"),
+    ("helix/config.toml", ".config/helix/config.toml"),
+    # Spotlight owns ctrl+space on macOS, so use a variant with a different prefix.
+    ("herdr/config.macos.toml", ".config/herdr/config.toml"),
+]
+
 SYMLINKS_WINDOWS = [
     # (source in dotfiles, target in home)
     ("yazi-win", "AppData/Roaming/yazi/config"),
@@ -58,7 +67,12 @@ def main() -> None:
     print(f"Dotfiles: {DOTFILES_DIR}")
     print(f"Home: {HOME}\n")
 
-    symlinks = SYMLINKS_WINDOWS if sys.platform == "win32" else SYMLINKS_LINUX
+    if sys.platform == "win32":
+        symlinks = SYMLINKS_WINDOWS
+    elif sys.platform == "darwin":
+        symlinks = SYMLINKS_MACOS
+    else:
+        symlinks = SYMLINKS_LINUX
     for source, target in symlinks:
         create_symlink(source, target)
 

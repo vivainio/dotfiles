@@ -1,0 +1,94 @@
+# Herdr configuration
+#
+# Installed as ~/.config/herdr/config.toml, mirroring the way
+# ~/dotfiles/tmux.conf is linked as ~/.tmux.conf.
+
+onboarding = false
+
+[theme]
+name = "catppuccin"
+
+[terminal]
+default_shell = "/opt/homebrew/bin/nu"
+new_cwd = "follow"
+
+[keys]
+# Match the tmux prefix.
+prefix = "ctrl+space"
+
+# tmux: prefix + R
+reload_config = "prefix+shift+r"
+
+# Treat Herdr tabs like tmux windows.
+new_tab = "prefix+c"
+previous_tab = "alt+left"
+next_tab = "alt+right"
+close_tab = "prefix+k"
+
+# Treat Herdr workspaces like tmux sessions.
+previous_workspace = "alt+up"
+next_workspace = "alt+down"
+close_workspace = "prefix+shift+k"
+
+# Move through agents in the sidebar.
+previous_agent = "alt+shift+up"
+next_agent = "alt+shift+down"
+
+# tmux: prefix + x
+close_pane = "prefix+x"
+
+# Keep pane navigation available without colliding with prefix+k.
+focus_pane_left = "prefix+left"
+focus_pane_down = "prefix+down"
+focus_pane_up = "prefix+up"
+focus_pane_right = "prefix+right"
+split_vertical = "prefix+v"
+split_horizontal = "prefix+minus"
+
+[[keys.command]]
+key = "prefix+ctrl+g"
+type = "popup"
+command = "lazygit"
+width = "100%"
+height = "80%"
+
+
+[[keys.command]]
+key = "prefix+ctrl+l"
+type = "popup"
+command = "lf"
+width = "100%"
+height = "80%"
+
+[[keys.command]]
+key = "prefix+ctrl+n"
+type = "popup"
+command = "edit ~/notes/$(date +%Y-%m-%d).md"
+width = "100%"
+height = "80%"
+
+[[keys.command]]
+key = "prefix+ctrl+r"
+type = "plugin_action"
+command = "persiyanov.reviewr.toggle"
+
+[[keys.command]]
+key = "prefix+m"
+type = "popup"
+command = "MENYY_POPUP=1 menyy"
+width = "90%"
+height = "80%"
+
+[[keys.command]]              # open in a split beside your work
+key = "prefix+f"
+type = "shell"
+command = "herdr plugin action invoke open-file-viewer --plugin herdr-file-viewer"
+
+[[keys.command]]              # …or in its own tab
+key = "prefix+shift+f"
+type = "shell"
+command = "herdr plugin action invoke open-file-viewer-tab --plugin herdr-file-viewer"
+
+[ui]
+mouse_capture = true
+agent_panel_sort = "spaces"
